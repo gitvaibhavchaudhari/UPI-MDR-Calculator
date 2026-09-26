@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UPI MDR Calculator</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap nav-row">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#0B5D3B"/><path d="M7 12l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      UPI MDR Calculator
+    </div>
+    <nav class="links">
+      <a href="#calculator">Calculator</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#mdr-rates">MDR Rates</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+      <a href="#calculator" class="btn btn-primary">Calculate Now</a>
+      <button class="hamburger" id="hamBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="wrap" id="mobileNav">
+    <a href="#calculator">Calculator</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#mdr-rates">MDR Rates</a>
+    <a href="#faq">FAQ</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Calculate your UPI payment charges instantly</h1>
+    <p>Estimate MDR, GST, transaction charges, and your final settlement amount in seconds.</p>
+    <a href="#calculator" class="btn btn-primary">Calculate Now</a>
+    <div class="trust">Simple • Fast • Transparent</div>
+  </div>
+</section>
+
+<section id="calculator">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>UPI Charge Calculator</h2>
+      <p>Enter your transaction details below. Nothing here is sent anywhere — it's a local estimate only.</p>
+    </div>
+    <div class="calc-card">
+      <div class="field">
+        <label for="amount">Transaction Amount</label>
+        <div class="currency-input"><span>₹</span><input type="text" inputmode="decimal" id="amount" placeholder="10,000"></div>
+        <div class="error-msg" id="err-amount">Please enter a valid, non-negative amount.</div>
+      </div>
+
+      <div class="field">
+        <label for="mdrRate">MDR Rate (%)</label>
+        <div class="input-row">
+          <select id="mdrPreset" style="max-width:150px;">
+            <option value="custom">Custom MDR</option>
+            <option value="0">0%</option>
+            <option value="0.5">0.5%</option>
+            <option value="1" selected>1%</option>
+            <option value="1.5">1.5%</option>
+            <option value="2">2%</option>
+            <option value="2.5">2.5%</option>
+          </select>
+          <input type="text" inputmode="decimal" id="mdrRate" value="1">
+        </div>
+        <div class="error-msg" id="err-mdr">MDR rate cannot be negative.</div>
+        <div class="mdr-presets" id="presetBtns"></div>
+      </div>
+
+      <div class="toggle-row">
+        <span class="lbl">Apply GST on MDR (18%, configurable)</span>
+        <label class="switch"><input type="checkbox" id="gstToggle" checked><span class="slider-el"></span></label>
+      </div>
+
+      <div class="field">
+        <label for="txnType">Transaction Type</label>
+        <select id="txnType">
+          <option value="upi">UPI</option>
+          <option value="upi_cc">UPI Credit Card</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="note">Actual MDR depends on your payment provider, merchant category, transaction type and applicable regulations — not every UPI transaction is charged the same rate.</div>
+
+      <div class="calc-actions">
+        <button class="btn btn-primary" id="calcBtn">Calculate Charges</button>
+        <button class="btn btn-secondary" id="resetBtn">Reset</button>
+      </div>
+
+      <div class="results" id="results">
+        <div class="net-hero">
+          <div class="label">NET SETTLEMENT AMOUNT</div>
+          <div class="amount" id="r-net">₹0</div>
+          <div class="sub">Estimated amount received after MDR and applicable GST.</div>
+        </div>
+        <div class="result-grid">
+          <div class="result-item"><div class="k">Transaction Amount</div><div class="v" id="r-amount">₹0</div></div>
+          <div class="result-item"><div class="k">MDR Rate</div><div class="v" id="r-rate">0%</div></div>
+          <div class="result-item"><div class="k">MDR Amount</div><div class="v" id="r-mdramt">₹0</div></div>
+          <div class="result-item"><div class="k">GST on MDR</div><div class="v" id="r-gst">₹0</div></div>
+          <div class="result-item"><div class="k">Total Charges</div><div class="v" id="r-total">₹0</div></div>
+          <div class="result-item"><div class="k">Effective Cost</div><div class="v" id="r-eff">0%</div></div>
+        </div>
+
+        <div class="breakdown" id="breakdown"></div>
+
+        <div class="result-actions">
+          <button class="btn btn-secondary" id="copyBtn">Copy Results</button>
+          <button class="btn btn-secondary" id="printBtn">Download / Print Report</button>
+          <button class="btn btn-secondary" id="clearBtn">Clear All</button>
+        </div>
+        <div class="timestamp" id="timestamp"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Estimate your monthly UPI charges</h2>
+      <p>See how MDR and GST add up across a typical month of transactions.</p>
+    </div>
+    <div class="calc-card">
+      <div class="grid-2">
+        <div>
+          <div class="field"><label for="avgTxn">Average Transaction Value</label><div class="currency-input"><span>₹</span><input type="text" inputmode="decimal" id="avgTxn" placeholder="1,000"></div></div>
+          <div class="field"><label for="txnPerDay">Transactions per Day</label><input type="text" inputmode="decimal" id="txnPerDay" placeholder="100"></div>
+        </div>
+        <div>
+          <div class="field"><label for="workDays">Working Days per Month</label><input type="text" inputmode="decimal" id="workDays" placeholder="30"></div>
+          <div class="field"><label for="monthlyMdr">MDR (%)</label><input type="text" inputmode="decimal" id="monthlyMdr" placeholder="1"></div>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="monthlyBtn" style="margin-top:10px;">Estimate Monthly Charges</button>
+      <div class="mini-grid" id="monthlyResults" style="display:none;">
+        <div class="result-item"><div class="k">Monthly Volume</div><div class="v" id="m-volume">₹0</div></div>
+        <div class="result-item"><div class="k">Monthly MDR</div><div class="v" id="m-mdr">₹0</div></div>
+        <div class="result-item"><div class="k">Monthly GST</div><div class="v" id="m-gst">₹0</div></div>
+        <div class="result-item"><div class="k">Total Charges</div><div class="v" id="m-total">₹0</div></div>
+        <div class="result-item" style="grid-column:1/-1;"><div class="k">Monthly Net Settlement</div><div class="v" id="m-net">₹0</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mdr-rates">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Understanding UPI MDR</h2>
+      <p>MDR (Merchant Discount Rate) is a fee that may be charged to a merchant for accepting certain digital payments. The applicable rate depends on the payment method, merchant arrangement, provider, and applicable rules.</p>
+    </div>
+    <table class="mdr-table">
+      <thead><tr><th>Payment Method</th><th>MDR Rate</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>UPI</td><td><span class="tag">Example / Configurable</span></td><td>Depends on applicable arrangement</td></tr>
+        <tr><td>UPI Credit Card</td><td><span class="tag">Example / Configurable</span></td><td>May differ from standard UPI</td></tr>
+        <tr><td>Other Payment Method</td><td><span class="tag">Example / Configurable</span></td><td>Provider dependent</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="how-it-works">
+  <div class="wrap">
+    <div class="section-head"><h2>How it works</h2></div>
+    <div class="steps">
+      <div class="step"><div class="num">01</div><h3>Enter transaction amount</h3><p>Type in the amount your customer is paying.</p></div>
+      <div class="step"><div class="num">02</div><h3>Enter or select MDR rate</h3><p>Pick a preset or type your own agreed rate.</p></div>
+      <div class="step"><div class="num">03</div><h3>View charges & settlement</h3><p>See MDR, GST, and your net settlement instantly.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head"><h2>Frequently asked questions</h2></div>
+    <div class="faq" id="faqList"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="disclaimer">This calculator provides an estimate for informational purposes only. Actual payment processing charges, MDR, GST, settlement deductions, and applicable fees may vary depending on the payment provider, merchant agreement, payment instrument, merchant category, and applicable regulations. Verify applicable charges with your payment service provider.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <div class="brand" style="color:#fff;">UPI MDR Calculator</div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a><a href="#">Terms</a><a href="#">Disclaimer</a><a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="disclaimer">This tool is an independent estimation utility. It is not affiliated with NPCI, any bank, or any payment provider, and does not reflect official or current rates.</div>
+    <div class="copyright">© 2026 UPI MDR Calculator. All Rights Reserved.</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
