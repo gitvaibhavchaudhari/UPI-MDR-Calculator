@@ -1,11 +1,12 @@
 # 💳 UPI MDR Calculator
 
 A simple, responsive web-based **UPI MDR Calculator** that helps merchants estimate payment processing charges, GST on MDR, total charges, and net settlement amount.
+The calculator works completely on the client side, so no transaction data is sent to a server.
 
 # Live Demo
 (https://upimdrcalculator.netlify.app/)
 
-The calculator works completely on the client side, so no transaction data is sent to a server.
+
 
 ## 🚀 Features
 
